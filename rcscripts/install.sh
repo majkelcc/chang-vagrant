@@ -1,10 +1,8 @@
 #!/bin/bash
 
-export CHANG_DIR=
-export CHANG_PROJECTS_DIR=$CHANG_DIR/projects
+set -eux
 
-sed "s/export CHANG_DIR=XXX/export CHANG_DIR=${PWD//\//\\\/}/" rcscripts/changrc > ~/.changrc
-source ~/.changrc
+sed "s/export CHANG_DIR=XXX/export CHANG_DIR=${PWD//\//\\/}/" rcscripts/changrc > ~/.changrc
 
 if ! grep -c "source ~/.changrc" ~/.bash_profile >/dev/null; then
   echo "source ~/.changrc" >> ~/.bash_profile

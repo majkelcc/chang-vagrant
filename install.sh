@@ -1,8 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -eux
 
-source ./rcscripts/install.sh
+./rcscripts/install.sh
+source ~/.changrc
 
 bash -eux <<VAGRANT
   cd vagrant
