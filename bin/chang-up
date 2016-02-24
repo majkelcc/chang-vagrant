@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $CHANG_DIR/vagrant
+VBoxManage list runningvms | grep -q '^"chang"' || vagrant up

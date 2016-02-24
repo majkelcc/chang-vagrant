@@ -1,0 +1,36 @@
+#!/bin/bash
+
+project=$1
+script=${2%/}
+args=(${@})
+
+export APP_UID=`id -u`
+export HOST_IP=`netstat -rn | grep "^0.0.0.0 " | cut -d " " -f10`
+export CHANG_PROJECT=$project
+export CHANG_PROJECTS_DIR=${HOME}/projects
+export CHANG_PROJECT_DIR=$CHANG_PROJECTS_DIR/$CHANG_PROJECT
+export COMPOSE_PROJECT_NAME=$CHANG_PROJECT
+export BIN=$CHANG_PROJECTS_DIR/$CHANG_PROJECT/.chang/bin
+
+bindir=$BIN/$script
+
+function not_found() {
+  cmd=($CHANG_PROJECT ${script//\// } ${args[@]:2})
+  echo "${cmd[@]}: command not found" 1>&2
+  exit 1
+}
+
+[[ -x $bindir ]] || not_found
+
+cd $CHANG_PROJECTS_DIR/$CHANG_PROJECT/.chang/docker
+
+if [[ -f $bindir ]]; then
+  $bindir "${@:3}"
+elif [[ -n $3 && -x $bindir/$3 ]]; then
+  echo $bindir/$3
+  $bindir/$3 "${@:4}"
+elif [[ -x $bindir/${bindir##*/} ]]; then
+  $bindir/${bindir##*/} "${@:3}"
+else
+  not_found
+fi

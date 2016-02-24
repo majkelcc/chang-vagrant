@@ -1,0 +1,17 @@
+#!/bin/bash
+
+[ $# -lt 2 ] && exit 1
+
+project=$1
+shift
+
+bindir="${CHANG_PROJECTS_DIR}/${project}/.chang/bin"
+
+script=""
+while [[ -n $1 ]]; do
+  [ -d "${bindir}/${script}$1" ] || break
+  script+="$1/"
+  shift
+done
+
+ssh -t -q chang bash --login -c \"chang-run $project $script ${@}\"

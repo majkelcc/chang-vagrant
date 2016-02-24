@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source=${CHANG_PROJECTS_DIR:?}
+
+if [[ $@ == "--init" ]]; then
+  args="-ignorearchives"
+elif [[ -n $1 ]]; then
+  echo "unsupported argument(s): ${@/--init}" 1>&2
+  exit 1
+fi
+
+$CHANG_DIR/bin/__chang-unison $source ssh://default//home//vagrant//projects \
+  -sshargs="-F ${HOME}/.vagrant-ssh-config" \
+  -ignore='Name {*.swp,*.pyc,tmp,log,.zeus.sock,node_modules,.DS_Store}' \
+  -rsync=false \
+  -retry=10 \
+  -terse=true \
+  -batch=true \
+  -prefer=$source \
+  ${args:-"-repeat=1"}

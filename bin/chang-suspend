@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd $CHANG_DIR/vagrant
+if VBoxManage list runningvms | grep -q '^"chang"'; then
+  vagrant suspend
+else
+  echo "chang virtual machine is not running" 1>&2
+  exit 1
+fi
