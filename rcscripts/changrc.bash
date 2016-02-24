@@ -1,8 +1,5 @@
 #!/bin/bash
 
-CHANG_DIR=/Users/majkel/chang
-CHANG_PROJECTS_DIR=$CHANG_DIR/projects
-
 function _chang_projects_completion() {
   COMPREPLY=($(compgen -W "$(chang_projects_list)" -- ${1}))
 }
