@@ -12,7 +12,8 @@ function _chang_bindir_completion() {
   local bindir=$1
   shift
 
-  local commands=${COMP_WORDS[@]:1:$(( COMP_CWORD > 0 ? COMP_CWORD - 1 : 0 ))}
+  local -a commands
+  commands=${COMP_WORDS[@]:1:$(( COMP_CWORD > 0 ? COMP_CWORD - 1 : 0 ))}
   local current=${COMP_WORDS[COMP_CWORD]}
 
   local script="${bindir}"
@@ -23,10 +24,13 @@ function _chang_bindir_completion() {
   COMPREPLY=()
 
   if [[ -d $script ]]; then
-    local executables=($(find ${script} -perm +111 -type f -or -type l))
-    local completions=(${executables[@]#$script/})
-    local del=($command)
-    local completions=(${completions[@]%%/*})
+    local -a executables
+    local -a completions
+    executables=($(find ${script} -perm +111 -type f -or -type l))
+    completions=(${executables[@]#$script/})
+    local -a del
+    del=($command)
+    completions=(${completions[@]%%/*})
     COMPREPLY=($(compgen -W "${completions[*]/$del}" -- ${current}))
   fi
 }
@@ -44,7 +48,8 @@ function _chang-run_completion() {
 }
 
 function chang_projects_list() {
-  local projects=($(find $CHANG_PROJECTS_DIR -type d -mindepth 1 -maxdepth 1))
+  local -a projects
+  projects=($(find $CHANG_PROJECTS_DIR -type d -mindepth 1 -maxdepth 1))
   echo ${projects[@]#$CHANG_PROJECTS_DIR/}
 }
 
